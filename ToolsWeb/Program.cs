@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ToolsWeb.Data;
-
+using Tools.DataAccess;
+using Tools.DataAccess.Repository;
+using Tools.DataAccess.Repository.IRepository;
 namespace ToolsWeb
 {
     public class Program
@@ -15,7 +16,7 @@ namespace ToolsWeb
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection")
                 ));
-
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -35,7 +36,7 @@ namespace ToolsWeb
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
