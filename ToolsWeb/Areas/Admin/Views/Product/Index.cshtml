@@ -11,15 +11,20 @@
     </div>
     <br /><br />
 
-    <table class="table table-bordered table-striped border-primary" style="width:100%">
+    <table id="tblData" class="table table-bordered table-striped border-primary" style="width:100%">
         <thead>
             <tr>
                 <th> Name </th>
                 <th> CatalogNumber </th>
                 <th> Price </th>
-                <th> CompanyName </th>                   
-                <th> </th>
+                <th> CompanyName </th>
+                <th> Category </th>
+                @*  <th> </th>*@
             </tr>
         </thead>
     </table>
 </div>
+
+@section Scripts{
+    <script src="~/js/product.js"></script>
+}
