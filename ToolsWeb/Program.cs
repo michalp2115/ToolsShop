@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Tools.DataAccess;
 using Tools.DataAccess.Repository;
 using Tools.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Identity;
 namespace ToolsWeb
 {
     public class Program
@@ -16,6 +17,11 @@ namespace ToolsWeb
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection")
                 ));
+
+            builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+
+
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             var app = builder.Build();
 
@@ -31,9 +37,10 @@ namespace ToolsWeb
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication(); 
 
             app.UseAuthorization();
-
+            app.MapRazorPages();
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
