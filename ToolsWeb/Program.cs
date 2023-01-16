@@ -3,6 +3,9 @@ using Tools.DataAccess;
 using Tools.DataAccess.Repository;
 using Tools.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Tools.Utility;
+
 namespace ToolsWeb
 {
     public class Program
@@ -18,11 +21,12 @@ namespace ToolsWeb
                 builder.Configuration.GetConnectionString("DefaultConnection")
                 ));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>()
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -37,7 +41,7 @@ namespace ToolsWeb
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseAuthentication(); 
+            app.UseAuthentication();
 
             app.UseAuthorization();
             app.MapRazorPages();

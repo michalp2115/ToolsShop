@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\company.js" />
     <Content Remove="wwwroot\js\product.js" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Tools.DataAccess\Tools.DataAccess.csproj" />
+    <ProjectReference Include="..\Tools.Utility\Tools.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\js\company.js" />
     <None Include="wwwroot\js\product.js" />
   </ItemGroup>
 
