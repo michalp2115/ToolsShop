@@ -56,7 +56,7 @@ namespace Tools.Models
         public Category Category { get; set; }
 
         [Required]
-        [Display(Name = "Cover Type")]
+        [Display(Name = "IsLimited")]
         public int CoverTypeId { get; set; }
         [ForeignKey("CoverTypeId")]
         [ValidateNever]

@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Data;
 using Tools.DataAccess;
 using Tools.DataAccess.Repository;
 using Tools.DataAccess.Repository.IRepository;
 using Tools.Models;
 using Tools.Models.ViewModels;
+using Tools.Utility;
 
 namespace ToolsWeb.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
