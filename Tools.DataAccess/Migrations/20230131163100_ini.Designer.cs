@@ -12,8 +12,8 @@ using Tools.DataAccess;
 namespace Tools.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230130174216_Ini")]
-    partial class Ini
+    [Migration("20230131163100_ini")]
+    partial class ini
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,6 +231,29 @@ namespace Tools.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Tools.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DisplayOrder")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("Tools.Models.Company", b =>
                 {
                     b.Property<int>("Id")
@@ -261,6 +284,24 @@ namespace Tools.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Companies");
+                });
+
+            modelBuilder.Entity("Tools.Models.CoverType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CoverTypes");
                 });
 
             modelBuilder.Entity("Tools.Models.OrderDetail", b =>
@@ -416,24 +457,11 @@ namespace Tools.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.HasIndex("CategoryId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            CatalogNumber = "123",
-                            CategoryId = 0,
-                            CompanyName = "Company",
-                            CoverTypeId = 0,
-                            Description = "desc",
-                            ImageUrl = "https://cdn-reichelt.de/bilder/web/xxl_ws/D300/FAEUSTEL.png",
-                            ListPrice = 32.0,
-                            Name = "Hammer",
-                            Price = 40.0,
-                            Price100 = 20.0,
-                            Price50 = 30.0
-                        });
+                    b.HasIndex("CoverTypeId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Tools.Models.ShoppingCart", b =>
@@ -575,68 +603,21 @@ namespace Tools.DataAccess.Migrations
 
             modelBuilder.Entity("Tools.Models.Product", b =>
                 {
-                    b.OwnsOne("Tools.Models.Category", "Category", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .HasColumnType("int");
-
-                            b1.Property<DateTime>("CreatedDateTime")
-                                .HasColumnType("datetime2");
-
-                            b1.Property<int>("DisplayOrder")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("Id");
-
-                            b1.ToTable("Categories");
-
-                            b1.WithOwner()
-                                .HasForeignKey("Id");
-
-                            b1.HasData(
-                                new
-                                {
-                                    Id = 10,
-                                    CreatedDateTime = new DateTime(2023, 1, 30, 18, 42, 16, 659, DateTimeKind.Local).AddTicks(5464),
-                                    DisplayOrder = 1,
-                                    Name = "Category"
-                                });
-                        });
-
-                    b.OwnsOne("Tools.Models.CoverType", "CoverType", b1 =>
-                        {
-                            b1.Property<int>("Id")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Name")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
-
-                            b1.HasKey("Id");
-
-                            b1.ToTable("CoverTypes");
-
-                            b1.WithOwner()
-                                .HasForeignKey("Id");
-
-                            b1.HasData(
-                                new
-                                {
-                                    Id = 10,
-                                    Name = "IsLimited"
-                                });
-                        });
-
-                    b.Navigation("Category")
+                    b.HasOne("Tools.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CoverType")
+                    b.HasOne("Tools.Models.CoverType", "CoverType")
+                        .WithMany()
+                        .HasForeignKey("CoverTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("CoverType");
                 });
 
             modelBuilder.Entity("Tools.Models.ShoppingCart", b =>
